@@ -18,8 +18,8 @@ CHIP PC {
     PARTS:
     // Put your code here:
     Register(in=rout, load=true, out=out, out=regout);
-    Inc16(in=iin, out=iout); // incrementer
-
+    
+    Inc16(in=regout, out=iout); // incrementer
     Mux16(a=lout, b[0..15]=false , sel=reset, out=rout); // reset mux
     Mux16(a=imuxout, b=in, sel=load, out=lout); // load mux
     Mux16(a=regout, b=iout, sel=inc, out=imuxout); // Inc mux
