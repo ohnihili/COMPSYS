@@ -18,8 +18,8 @@ CHIP RAM16K {
     // Put your code here:
     DMux4Way(in=load, sel=address[12..13], a=a, b=b, c=c, d=d);
 
-    RAM4k(in=in, load=a, address=address[0..11], out=oa);
-    RAM4k(in=in, load=b, address=address[0..11], out=ob);
+    RAM4K(in=in, load=a, address=address[0..11], out=oa);
+    RAM4K(in=in, load=b, address=address[0..11], out=ob);
     RAM4K(in=in, load=c, address=address[0..11], out=oc);
     RAM4K(in=in, load=d, address=address[0..11], out=od);
 
