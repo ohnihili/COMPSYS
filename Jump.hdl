@@ -32,10 +32,10 @@ PARTS:
     Or(a=zr, b=ng, out=le);
     Not(in=le, out=pos);
 
-    And(a=j1, b=pos, out=jo1);
+    And(a=j3, b=pos, out=jo3);
     And(a=j2, b=zr, out=jo2);
-    And(a=j3, b=ng, out=jo3);
+    And(a=j1, b=ng, out=jo1);
 
-    Or(a=jo1, b=jo1, out=or);
-    Or(a=or, b=jo3, out=out);
+    Or(a=jo3, b=jo2, out=or);
+    Or(a=or, b=jo1, out=jump);
 }
