@@ -1,0 +1,38 @@
+// implement 
+//if(x=7){
+//    let y = true;
+//} else {
+//    let y = 5;
+//}
+
+push static 0
+push constant 7
+eq
+if-goto TRUE 
+push constant 5
+pop static 1
+goto END
+
+label TRUE 
+pop static 1
+
+label END
+goto END
+
+// or
+
+push static 0
+push constant 7
+eq
+not
+if-goto ELSE 
+push constant -1
+pop static 1
+goto END
+
+label ELSE
+push constant 5
+pop static 1
+
+label END
+goto END

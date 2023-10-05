@@ -1,0 +1,7 @@
+// implement (7+8)-5
+
+push constant 7
+push constant 8
+add
+push constant 5
+sub

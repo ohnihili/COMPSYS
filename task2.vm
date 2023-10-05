@@ -1,0 +1,9 @@
+// implement (x<y)&(x>0)
+
+push static 0
+push static 1
+lt
+push static 0
+push constant 0
+gt
+and
