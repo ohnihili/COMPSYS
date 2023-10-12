@@ -3,25 +3,27 @@
 // x & y are static variables
 
 // Put your code here.
+push static 1
+pop static 3
 
 label MULT
-push static 1
+push static 3
 push constant 0
 eq
 if-goto POP
 
 push static 0
-push static 2
+push static 4
 add
-pop static 2
-push static 1
+pop static 4
+push static 3
 push constant 1
 sub
-pop static 1
+pop static 3
 goto MULT
 
 label POP
-push static 2
+push static 4
 pop local 0 
 
 
