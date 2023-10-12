@@ -5,8 +5,9 @@
 // Put your code here.
 push static 1
 pop static 3
+
 push static 3
-push const 0
+push constant 0
 lt 
 if-goto NEG
 goto MULT
