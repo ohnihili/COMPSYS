@@ -4,6 +4,25 @@
 
 // Put your code here.
 
+label MULT
+push static 1
+push constant 0
+eq
+if-goto POP
+
+push static 0
+push static 2
+add
+pop static 2
+push static 1
+push constant 1
+sub
+pop static 1
+goto MULT
+
+label POP
+push static 2
+pop local 0 
 
 
 label END
