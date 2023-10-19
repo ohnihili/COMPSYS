@@ -3,52 +3,17 @@
 // x & y are static variables
 
 // Put your code here.
-
-// set static 3 to static 1 and static 5 to 1
 push static 1
 pop static 3
-push static 5 
-push constant 1
-pop static 5
 
-// if y is negative go to store
-push static 1
+push constant 0 
+push static 3
+eq
+if-goto POP
 push constant 0
-lt 
-if-goto STORE
-goto NEGCHECK
-
-// Store the posi or neg value in stat 5
-label STORE
-push static 5 
-neg
-pop static 5
 push static 0
-push constant 0
-gt 
-if-goto NEGCHECK
-push static 5 
-neg
-pop static 5
-
-
-label NEGCHECK
-push static 3
-push constant 0
-lt 
-if-goto NEG
-goto MULT
-
-label NEG
-push static 3
-neg
-pop static 3
-
-push static 3
-push constant 0
-lt 
-if-goto NEG
-goto MULT
+eq
+if-goto POP
 
 label MULT
 push static 3
@@ -67,9 +32,17 @@ pop static 3
 goto MULT
 
 label POP
+push static 4 
+push constant 0
+eq
+if-goto POPZERO
 push static 4
 pop local 0 
+goto END
 
+label POPZERO
+push constant 0 
+pop local 0
 
 label END
 goto END
