@@ -4,7 +4,7 @@
 
 // Put your code here.
 
-// set static 3 to static 1
+// set static 3 to static 1 and static 5 to 1
 push static 1
 pop static 3
 push static 5 
@@ -15,29 +15,31 @@ pop static 5
 push static 1
 push constant 0
 lt 
-go-to STORE
-
-// if x is negative go to store
-label XNEG
-push static 0
-push constant 0
-lt 
-go-to STORE
+if-goto STORE
+goto NEGCHECK
 
 // Store the posi or neg value in stat 5
+label STORE
 push static 5 
 neg
 pop static 5
-go-to XNEG
+push static 0
+push constant 0
+gt 
+if-goto NEGCHECK
+push static 5 
+neg
+pop static 5
 
 
+label NEGCHECK
 push static 3
 push constant 0
 lt 
 if-goto NEG
 goto MULT
 
-label NEGX
+label NEG
 push static 3
 neg
 pop static 3
