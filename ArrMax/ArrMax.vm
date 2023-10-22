@@ -4,6 +4,12 @@
 // Put your code here.
 
 function ArrMax.arrMax 2
+// check length
+push argument 1
+push constant 1
+lt 
+if-goto RETURNFALSE
+
 push argument 0
 pop pointer 1
 
@@ -74,5 +80,7 @@ label RETURN
 push temp 0
 return
 
-
+label RETURNFALSE
+push constant -1
+return
 
