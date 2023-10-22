@@ -3,45 +3,44 @@
 // x & y are static variables
 
 // Put your code here.
+push constant 0
+pop local 0
+
+push static 0
+pop temp 0
+push temp 0
+push constant 0
+gt
+if-goto PX
+
+push temp 0
+neg
+pop temp 0
+
+label PX
+push temp 0
+push constant 0
+eq
+if-goto POP
+
 push static 1
-pop static 3
-
-push constant 0 
-push static 3
-eq
-if-goto POP
-push constant 0
-push static 0
-eq
-if-goto POP
-
-label MULT
-push static 3
-push constant 0
-eq
-if-goto POP
-
-push static 0
-push static 4
+push local 0
 add
-pop static 4
-push static 3
+pop local 0
+push temp 0
 push constant 1
 sub
-pop static 3
-goto MULT
+pop temp 0
+goto PX
 
 label POP
-push static 4 
 push constant 0
-eq
-if-goto POPZERO
-push static 4
-pop local 0 
-goto END
+push static 0
+lt
+if-goto END
 
-label POPZERO
-push constant 0 
+push local 0
+neg
 pop local 0
 
 label END
