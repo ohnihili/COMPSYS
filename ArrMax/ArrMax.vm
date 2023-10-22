@@ -81,6 +81,6 @@ push temp 0
 return
 
 label RETURNFALSE
-push constant -1
+push constant 0
 return
 
