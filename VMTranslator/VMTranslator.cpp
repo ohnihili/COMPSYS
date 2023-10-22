@@ -20,7 +20,9 @@ VMTranslator::~VMTranslator() {
 
 /** Generate Hack Assembly code for a VM push operation */
 string VMTranslator::vm_push(string segment, int offset){
-    return "";
+    if (segment == "constant") {
+    // For constant values, you can simply push the value onto the stack.
+    return "@" + to_string(offset) + "\nD=A\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";}
 }
 
 /** Generate Hack Assembly code for a VM pop operation */
