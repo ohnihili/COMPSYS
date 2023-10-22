@@ -22,21 +22,29 @@ VMTranslator::~VMTranslator() {
 string VMTranslator::vm_push(string segment, int offset) {
     if (segment == "constant") {
         return "@" + to_string(offset) + "\nD=A\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+
     } else if (segment == "local") {
         return "@LCL\nD=M\n@" + to_string(offset) + "\nA=D+A\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+
     } else if (segment == "argument") {
         return "@ARG\nD=M\n@" + to_string(offset) + "\nA=D+A\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+
     } else if (segment == "this") {
         return "@THIS\nD=M\n@" + to_string(offset) + "\nA=D+A\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+
     } else if (segment == "that") {
         return "@THAT\nD=M\n@" + to_string(offset) + "\nA=D+A\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+
     } else if (segment == "temp") {
-        return "@5\nD=A\n@" + to_string(offset + 5) + "\nA=D+A\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+        return "@R5\nD=A\n@" + to_string(offset) + "\nA=D+A\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+
     } else if (segment == "pointer") {
         if (offset == 0) {
             return "@THIS\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+
         } else if (offset == 1) {
             return "@THAT\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+
         }
     }
 
