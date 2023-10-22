@@ -156,55 +156,151 @@ string VMTranslator::vm_if(string label) {
 
 /** Generate Hack Assembly code for a VM function operation */
 string VMTranslator::vm_function(string function_name, int n_vars) {
-    string functionLabel = function_name + "$" + to_string(n_vars);
-    string code = "(" + functionLabel + ")\n";
+    string assemblyCode;
+    
+    assemblyCode += "(" + function_name + ")\n";
+ 
     for (int i = 0; i < n_vars; i++) {
-        code += "@0\nD=A\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+        assemblyCode += "@0\n";
+        assemblyCode += "D=A\n";
+        assemblyCode += "@SP\n"; 
+        assemblyCode += "A=M\n";
+        assemblyCode += "M=D\n";
+        assemblyCode += "@SP\n"; 
+        assemblyCode += "M=M+1\n";
     }
-    return code;
+
+    return assemblyCode;
 }
 
 /** Generate Hack Assembly code for a VM call operation */
 string VMTranslator::vm_call(string function_name, int n_args) {
-    static int callCounter = 0;
-    string returnLabel = "RETURN_LABEL_" + to_string(callCounter);
-    callCounter++;
+ string assemblyCode;
+ static int return_label_count = 0;
 
-    string code = "@" + returnLabel + "\nD=A\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
-    code += "@LCL\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
-    code += "@ARG\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
-    code += "@THIS\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
-    code += "@THAT\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+    string return_label = "RETURN_LABEL_" + to_string(return_label_count);
+    return_label_count++;
 
-    // Reposition ARG for the called function.
-    code += "@SP\nD=M\n@" + to_string(n_args + 5) + "\nD=D-A\n@ARG\nM=D\n";
+    assemblyCode += "@" + return_label + "\n";
+    assemblyCode += "D=A\n";
+    assemblyCode += "@SP\n";
+    assemblyCode += "A=M\n";
+    assemblyCode += "M=D\n";
+    assemblyCode += "@SP\n";
+    assemblyCode += "M=M+1\n";
 
-    // Reposition LCL for the called function.
-    code += "@SP\nD=M\n@LCL\nM=D\n";
 
-    // Jump to the function label.
-    code += "@" + function_name + "\n0;JMP\n";
+    assemblyCode += "@LCL\n";
+    assemblyCode += "D=M\n";
+    assemblyCode += "@SP\n";
+    assemblyCode += "A=M\n";
+    assemblyCode += "M=D\n";
+    assemblyCode += "@SP\n";
+    assemblyCode += "M=M+1\n";
 
-    // Define the return label.
-    code += "(" + returnLabel + ")\n";
+    assemblyCode += "@ARG\n";
+    assemblyCode += "D=M\n";
+    assemblyCode += "@SP\n";
+    assemblyCode += "A=M\n";
+    assemblyCode += "M=D\n";
+    assemblyCode += "@SP\n";
+    assemblyCode += "M=M+1\n";
 
-    return code;
+
+    assemblyCode += "@THIS\n";
+    assemblyCode += "D=M\n";
+    assemblyCode += "@SP\n";
+    assemblyCode += "A=M\n";
+    assemblyCode += "M=D\n";
+    assemblyCode += "@SP\n";
+    assemblyCode += "M=M+1\n";
+
+
+    assemblyCode += "@THAT\n";
+    assemblyCode += "D=M\n";
+    assemblyCode += "@SP\n";
+    assemblyCode += "A=M\n";
+    assemblyCode += "M=D\n";
+    assemblyCode += "@SP\n";
+    assemblyCode += "M=M+1\n";
+
+
+    assemblyCode += "@SP\n";
+    assemblyCode += "D=M\n";
+    assemblyCode += "@" + to_string(n_args + 5) + "\n";
+    assemblyCode += "D=D-A\n";
+    assemblyCode += "@ARG\n";
+    assemblyCode += "M=D\n";
+
+    assemblyCode += "@SP\n";
+    assemblyCode += "D=M\n";
+    assemblyCode += "@LCL\n";
+    assemblyCode += "M=D\n";
+
+    assemblyCode += "@" + function_name + "\n";
+    assemblyCode += "0;JMP\n";
+
+
+    assemblyCode += "(" + return_label + ")\n";
+
+    return assemblyCode;
 }
 
 /** Generate Hack Assembly code for a VM return operation */
 string VMTranslator::vm_return() {
-    string code = "@5\nD=A\n@LCL\nA=M-D\nD=M\n@R13\nM=D\n";
+    string assemblyCode;
 
-    code += "@SP\nM=M-1\nA=M\nD=M\n@ARG\nA=M\nM=D\n";
+    assemblyCode += "@LCL\n";
+    assemblyCode += "D=M\n";
+    assemblyCode += "@FRAME\n";
+    assemblyCode += "M=D\n";
 
-    code += "@ARG\nD=M+1\n@SP\nM=D\n";
+    assemblyCode += "@5\n";
+    assemblyCode += "A=D-A\n";
+    assemblyCode += "D=M\n";
+    assemblyCode += "@RET\n";
+    assemblyCode += "M=D\n";
 
-    code += "@LCL\nD=M\n@THAT\nM=D\n";
-    code += "@LCL\nD=M\n@THIS\nM=D\n";
-    code += "@LCL\nD=M\n@ARG\nM=D\n";
-    code += "@LCL\nD=M\n@LCL\nM=D\n";
+    assemblyCode += "@SP\n";
+    assemblyCode += "A=M-1\n";
+    assemblyCode += "D=M\n";
+    assemblyCode += "@ARG\n";
+    assemblyCode += "A=M\n";
+    assemblyCode += "M=D\n";
 
-    code += "@R13\nA=M\n0;JMP\n";
 
-    return code;
+    assemblyCode += "@ARG\n";
+    assemblyCode += "D=M+1\n";
+    assemblyCode += "@SP\n";
+    assemblyCode += "M=D\n";
+
+
+    assemblyCode += "@FRAME\n";
+    assemblyCode += "D=M\n";
+    assemblyCode += "@THAT\n";
+    assemblyCode += "M=D\n";
+
+
+    assemblyCode += "@FRAME\n";
+    assemblyCode += "D=M\n";
+    assemblyCode += "@THIS\n";
+    assemblyCode += "M=D\n";
+
+
+    assemblyCode += "@FRAME\n";
+    assemblyCode += "D=M\n";
+    assemblyCode += "@ARG\n";
+    assemblyCode += "M=D\n";
+
+
+    assemblyCode += "@FRAME\n";
+    assemblyCode += "D=M\n";
+    assemblyCode += "@LCL\n";
+    assemblyCode += "M=D\n";
+
+    assemblyCode += "@RET\n";
+    assemblyCode += "A=M\n";
+    assemblyCode += "0;JMP\n";
+
+    return assemblyCode;
 }
