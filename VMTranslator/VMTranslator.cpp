@@ -146,16 +146,56 @@ string VMTranslator::vm_if(string label) {
 }
 
 /** Generate Hack Assembly code for a VM function operation */
-string VMTranslator::vm_function(string function_name, int n_vars){
-    return "";
+string VMTranslator::vm_function(string function_name, int n_vars) {
+    string functionLabel = function_name + "$" + to_string(n_vars);
+    string code = "(" + functionLabel + ")\n";
+    for (int i = 0; i < n_vars; i++) {
+        code += "@0\nD=A\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+    }
+    return code;
 }
 
 /** Generate Hack Assembly code for a VM call operation */
-string VMTranslator::vm_call(string function_name, int n_args){
-    return "";
+string VMTranslator::vm_call(string function_name, int n_args) {
+    static int callCounter = 0;
+    string returnLabel = "RETURN_LABEL_" + to_string(callCounter);
+    callCounter++;
+
+    string code = "@" + returnLabel + "\nD=A\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+    code += "@LCL\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+    code += "@ARG\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+    code += "@THIS\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+    code += "@THAT\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n";
+
+    // Reposition ARG for the called function.
+    code += "@SP\nD=M\n@" + to_string(n_args + 5) + "\nD=D-A\n@ARG\nM=D\n";
+
+    // Reposition LCL for the called function.
+    code += "@SP\nD=M\n@LCL\nM=D\n";
+
+    // Jump to the function label.
+    code += "@" + function_name + "\n0;JMP\n";
+
+    // Define the return label.
+    code += "(" + returnLabel + ")\n";
+
+    return code;
 }
 
 /** Generate Hack Assembly code for a VM return operation */
-string VMTranslator::vm_return(){
-    return "";
+string VMTranslator::vm_return() {
+    string code = "@5\nD=A\n@LCL\nA=M-D\nD=M\n@R13\nM=D\n";
+
+    code += "@SP\nM=M-1\nA=M\nD=M\n@ARG\nA=M\nM=D\n";
+
+    code += "@ARG\nD=M+1\n@SP\nM=D\n";
+
+    code += "@LCL\nD=M\n@THAT\nM=D\n";
+    code += "@LCL\nD=M\n@THIS\nM=D\n";
+    code += "@LCL\nD=M\n@ARG\nM=D\n";
+    code += "@LCL\nD=M\n@LCL\nM=D\n";
+
+    code += "@R13\nA=M\n0;JMP\n";
+
+    return code;
 }
