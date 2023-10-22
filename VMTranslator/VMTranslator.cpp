@@ -67,8 +67,8 @@ if (segment == "local") {
 }
 
 /** Generate Hack Assembly code for a VM add operation */
-string VMTranslator::vm_add(){
-    return "";
+string VMTranslator::vm_add() {
+    return "@SP\nM=M-1\nA=M\nD=M\n@SP\nM=M-1\nA=M\nM=M+D\n@SP\nM=M+1\n";
 }
 
 /** Generate Hack Assembly code for a VM sub operation */
