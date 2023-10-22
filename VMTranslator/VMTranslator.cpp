@@ -67,7 +67,7 @@ string VMTranslator::vm_pop(string segment, int offset){
     } else if (segment == "that") {
         return "@THAT\nD=M\n@" + to_string(offset) + "\nD=D+A\n@R13\nM=D\n@SP\nM=M-1\nA=M\nD=M\n@R13\nA=M\nM=D\n";
     } else if (segment == "temp") {
-        return "@R5\nD=A\n@" + to_string(offset + 5) + "\nD=D+A\n@R13\nM=D\n@SP\nM=M-1\nA=M\nD=M\n@R13\nA=M\nM=D\n";
+        return "@R5\nD=A\n@" + to_string(offset) + "\nD=D+A\n@R13\nM=D\n@SP\nM=M-1\nA=M\nD=M\n@R13\nA=M\nM=D\n";
     } else if (segment == "pointer") {
         if (offset == 0) {
             return "@THIS\n@SP\nM=M-1\nA=M\nD=M\n@THIS\nM=D\n";
