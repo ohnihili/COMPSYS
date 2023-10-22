@@ -138,7 +138,11 @@ string VMTranslator::vm_goto(string label) {
 
 /** Generate Hack Assembly code for a VM if-goto operation */
 string VMTranslator::vm_if(string label) {
-    return "@SP\nM=M-1\nA=M\nD=M\n@" + label + "\nD;JNE\n";
+    static int ifCounter = 0; 
+    string ifLabel = "IF_TRUE_" + to_string(ifCounter);
+    ifCounter++;
+
+    return "@SP\nM=M-1\nA=M\nD=M\n@" + ifLabel + "\nD;JNE\n@0\nA=M\n0;JMP\n(" + ifLabel + ")\n@" + label + "\n0;JMP\n";
 }
 
 /** Generate Hack Assembly code for a VM function operation */
