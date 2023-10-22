@@ -1,0 +1,4 @@
+push static 0
+
+label END
+goto END

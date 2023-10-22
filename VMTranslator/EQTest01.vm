@@ -1,0 +1,8 @@
+push constant 0
+push constant 1
+eq
+
+pop static 0
+
+label END
+goto END
