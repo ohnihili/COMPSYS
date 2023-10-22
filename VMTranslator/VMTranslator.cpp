@@ -72,43 +72,58 @@ string VMTranslator::vm_add() {
 }
 
 /** Generate Hack Assembly code for a VM sub operation */
-string VMTranslator::vm_sub(){
-    return "";
+string VMTranslator::vm_sub() {
+    return "@SP\nM=M-1\nA=M\nD=M\n@SP\nM=M-1\nA=M\nM=M-D\n@SP\nM=M+1\n";
 }
 
 /** Generate Hack Assembly code for a VM neg operation */
-string VMTranslator::vm_neg(){
-    return "";
+string VMTranslator::vm_neg() {
+    return "@SP\nM=M-1\nA=M\nM=-M\n@SP\nM=M+1\n";
 }
 
 /** Generate Hack Assembly code for a VM eq operation */
-string VMTranslator::vm_eq(){
-    return "";
+string VMTranslator::vm_eq() {
+    static int eqCounter = 0;
+    string eqLabel = "EQ_TRUE_" + to_string(eqCounter);
+    string eqEndLabel = "EQ_END_" + to_string(eqCounter);
+    eqCounter++;
+
+    return "@SP\nM=M-1\nA=M\nD=M\n@SP\nM=M-1\nA=M\nD=D-M\n@" + eqLabel + "\nD;JEQ\n@SP\nA=M\nM=0\n@" + eqEndLabel + "\n0;JMP\n(" + eqLabel + ")\n@SP\nA=M\nM=-1\n(" + eqEndLabel + ")\n@SP\nM=M+1\n";
 }
 
 /** Generate Hack Assembly code for a VM gt operation */
-string VMTranslator::vm_gt(){
-    return "";
+string VMTranslator::vm_gt() {
+    static int gtCounter = 0;
+    string gtLabel = "GT_TRUE_" + to_string(gtCounter);
+    string gtEndLabel = "GT_END_" + to_string(gtCounter);
+    gtCounter++;
+
+    return "@SP\nM=M-1\nA=M\nD=M\n@SP\nM=M-1\nA=M\nD=M-D\n@" + gtLabel + "\nD;JGT\n@SP\nA=M\nM=0\n@" + gtEndLabel + "\n0;JMP\n(" + gtLabel + ")\n@SP\nA=M\nM=-1\n(" + gtEndLabel + ")\n@SP\nM=M+1\n";
 }
 
 /** Generate Hack Assembly code for a VM lt operation */
-string VMTranslator::vm_lt(){
-    return "";
+string VMTranslator::vm_lt() {
+    static int ltCounter = 0;
+    string ltLabel = "LT_TRUE_" + to_string(ltCounter);
+    string ltEndLabel = "LT_END_" + to_string(ltCounter);
+    ltCounter++;
+
+    return "@SP\nM=M-1\nA=M\nD=M\n@SP\nM=M-1\nA=M\nD=M-D\n@" + ltLabel + "\nD;JLT\n@SP\nA=M\nM=0\n@" + ltEndLabel + "\n0;JMP\n(" + ltLabel + ")\n@SP\nA=M\nM=-1\n(" + ltEndLabel + ")\n@SP\nM=M+1\n";
 }
 
 /** Generate Hack Assembly code for a VM and operation */
-string VMTranslator::vm_and(){
-    return "";
+string VMTranslator::vm_and() {
+    return "@SP\nM=M-1\nA=M\nD=M\n@SP\nM=M-1\nA=M\nM=D&M\n@SP\nM=M+1\n";
 }
 
 /** Generate Hack Assembly code for a VM or operation */
-string VMTranslator::vm_or(){
-    return "";
+string VMTranslator::vm_or() {
+    return "@SP\nM=M-1\nA=M\nD=M\n@SP\nM=M-1\nA=M\nM=D|M\n@SP\nM=M+1\n";
 }
 
 /** Generate Hack Assembly code for a VM not operation */
-string VMTranslator::vm_not(){
-    return "";
+string VMTranslator::vm_not() {
+    return "@SP\nM=M-1\nA=M\nM=!M\n@SP\nM=M+1\n";
 }
 
 /** Generate Hack Assembly code for a VM label operation */
