@@ -138,24 +138,7 @@ string VMTranslator::vm_goto(string label) {
 
 /** Generate Hack Assembly code for a VM if-goto operation */
 string VMTranslator::vm_if(string label) {
-    string assemblyCode;
-    assemblyCode += "@SP\n";
-    assemblyCode += "M=M-1\n";
-    assemblyCode += "A=M\n";
-    assemblyCode += "D=M\n";
-
-    assemblyCode += "@" + label + "_TRUE\n";
-    assemblyCode += "D;JNE\n";
-
-    assemblyCode += "@SP\n";
-    assemblyCode += "M=M+1\n";
-    assemblyCode += "0;JMP\n";
-
-    assemblyCode += "(" + label + "_TRUE)\n";
-    assemblyCode += "@" + label + "\n";
-    assemblyCode += "0;JMP\n";
-
-    return assemblyCode;
+    return "@SP\nM=M-1\nA=M\nD=M\n@" + label + "\nD;JNE\n";
 }
 
 /** Generate Hack Assembly code for a VM function operation */
