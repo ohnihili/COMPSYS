@@ -162,7 +162,7 @@ string VMTranslator::vm_function(string function_name, int n_vars) {
  
     for (int i = 0; i < n_vars; i++) {
         assemblyCode += "@0\n";
-        assemblyCode += "D=A\n";
+        assemblyCode += "D=0\n";
         assemblyCode += "@SP\n"; 
         assemblyCode += "A=M\n";
         assemblyCode += "M=D\n";
